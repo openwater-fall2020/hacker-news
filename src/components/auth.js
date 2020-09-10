@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
+import axios from 'axios';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -14,12 +16,58 @@ export default class Login extends Component {
     };
   }
 
-  login(username, password) {
 
-  }
+  login = (event) => {
+    event.preventDefault();
+    this.setState({
+      loading: true
+    });
+    const userData = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    axios
+      .post('/loginUser', userData)
+      .then((response) => {
+        localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
+        this.setState({
+          loading: false,
+        });
+        this.props.history.push('/');
+      })
+      .catch((error) => {
+        this.setState({
+          errors: error.response.data,
+          loading: false
+        });
+      });
+  };
+  
 
-  signup() {
-
+  signup= (event) =>{
+    event.preventDefault();
+    this.setState({
+      loading: true
+    });
+    const newUserData = {
+      username: this.state.username,
+      password: this.state.password,
+    };
+    axios
+      .post('/signUpUser', newUserData)
+      .then((response) => {
+        localStorage.setItem('AuthToken', `${response.data.token}`);
+        this.setState({
+          loading: false,
+        });
+        this.props.history.push('/');
+      })
+      .catch((error) => {
+        this.setState({
+          errors: error.response.data,
+          loading: false
+        });
+      });
   }
   render() {
 	  console.log(this.state.error)
@@ -37,7 +85,7 @@ export default class Login extends Component {
         <h3>Login</h3>
         <form
           className="loginForm"
-          onSubmit={()=>{this.login(this.state.l_username, this.state.l_password); }}
+          onSubmit={this.login}
         >
           <div class="username">
             <label className="col-sm-4 col-form-label">username: </label>
@@ -64,7 +112,7 @@ export default class Login extends Component {
           </div>
 
           <div>
-            <input className="ghost-button" type="submit" value="   login   " />
+            <input className="ghost-button" type="submit" value="   login   "  onClick={this.login} />
           </div>
 
         </form>
