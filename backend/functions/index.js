@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-
+const cors = require('cors');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -21,6 +21,8 @@ const {
 } = require("./APIs/posts");
 
 
+
+app.use(cors());
 // Account
 app.post("/signUpUser", signUpUser);
 app.post("/loginUser", loginUser);

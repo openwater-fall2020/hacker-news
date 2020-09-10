@@ -7,12 +7,11 @@ firebase.initializeApp(config['config']);
 
 // Login User
  exports.loginUser = (request, response) => {
-    const body = JSON.parse(request.body);
+    // const body = JSON.parse(request.body);
      const userDetails = {
-         username: body.username,
-         password: body.password
+         username: request.body.username,
+         password: request.body.password
      }
-
      firebase
             .auth()
             .signInWithEmailAndPassword(userDetails.username + '@hacker-news.com', userDetails.password)
@@ -34,11 +33,12 @@ firebase.initializeApp(config['config']);
 
  // Sign Up
  exports.signUpUser = (request, response) => {
-     const body = JSON.parse(request.body);
-     console.log(body);
+     console.log(request.body);
+    //  const body = JSON.parse(request.body);
+    //  console.log(body);
      const newUser = {
-         username: body.username,
-         password: body.password
+         username: request.body.username,
+         password: request.body.password
      }
 
      let token, userId;
@@ -52,11 +52,11 @@ firebase.initializeApp(config['config']);
                 });
             } else {
                 return firebase
-                                .auth()
-                                .createUserWithEmailAndPassword(
-                                    newUser.username + '@hacker-news.com', 
-                                    newUser.password
-                                );
+                            .auth()
+                            .createUserWithEmailAndPassword(
+                                newUser.username + '@hacker-news.com', 
+                                newUser.password
+                            );
             }
         })
         .then((data) => {
