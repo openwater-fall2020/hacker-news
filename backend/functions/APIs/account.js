@@ -1,6 +1,6 @@
 const firebase = require('firebase');
 
-const {admin, db} = require('../utils/admin');
+const {db} = require('../utils/admin');
 const config = require('../utils/config');
 
 firebase.initializeApp(config['config']);
@@ -32,6 +32,7 @@ firebase.initializeApp(config['config']);
             })
  }
 
+ // Sign Up
  exports.signUpUser = (request, response) => {
      const body = JSON.parse(request.body);
      console.log(body);
