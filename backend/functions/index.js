@@ -13,10 +13,12 @@ const {
 	loginUser
 } = require("./APIs/account");
 
-// const {
-//     uploadPost,
-//     getPosts
-// } = require("./APIs/posts");
+const {
+    uploadPost,
+    postComments,
+    getPosts,
+    getComments
+} = require("./APIs/posts");
 
 
 // Account
@@ -24,8 +26,10 @@ app.post("/signUpUser", signUpUser);
 app.post("/loginUser", loginUser);
 
 // Posts
-// app.post("/uploadPost", uploadPost);
-// app.get("/getPosts", getPosts);
+app.post("/uploadPost", uploadPost);
+app.post("/postComments", postComments);
+app.get("/getPosts", getPosts);
+app.get("/getComments", getComments);
 
 exports.api = functions.https.onRequest(app);
 
