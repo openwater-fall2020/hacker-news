@@ -15,60 +15,11 @@ export default class Login extends Component {
   }
 
   login(username, password) {
-    fetch("http://localhost:3080" + "/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      redirect: "follow",
-      body: JSON.stringify({
-        username: username,
-        password: password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        /* do something with responseJson and go back to the Login view but
-         * make sure to check for responseJson.success! */
-        // console.log("json in login", responseJson);
-        if (responseJson.success) {
-          console.log("sucess");
-          // this.props.navigation.navigate();
-        } else if (!responseJson.success) {
-          alert("Incorrect username or password!");
-        }
-      })
-      .catch((err) => {
-        // alert(err);
-        console.log("error in login", err);
-        this.setState({ error: true });
-      });
+
   }
 
   signup() {
-    fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
 
-      body: JSON.stringify({
-        username: this.state.s_username,
-        password: this.state.s_password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        if (responseJson.success) {
-          console.log("success");
-        }
-      })
-      .catch((err) => {
-		  console.log("error in signup", err);
-          this.setState({ error: true });
-      });
   }
   render() {
 	  console.log(this.state.error)
@@ -78,7 +29,7 @@ export default class Login extends Component {
 		  message = <p>Bad Login</p>;
 	  }
 	  else{
-		  message = <p> </p>;
+		  message = <br/>;
 	  }
     return (
       <div>
@@ -86,7 +37,7 @@ export default class Login extends Component {
         <h3>Login</h3>
         <form
           className="loginForm"
-          onSubmit={this.login(this.state.l_username, this.state.l_password)}
+          onSubmit={()=>{this.login(this.state.l_username, this.state.l_password); }}
         >
           <div class="username">
             <label className="col-sm-4 col-form-label">username: </label>
@@ -104,6 +55,7 @@ export default class Login extends Component {
             <input
               className="form-control"
               type="password"
+			  secureTextEntry={true}
               name="password"
               value={this.state.l_password}
               placeholder="password"
@@ -120,7 +72,7 @@ export default class Login extends Component {
 		  <p> Forgot your password? </p>
 		</Link>
         <h3>Create Account </h3>
-        <form className="signupForm" onSubmit={this.signup()}>
+        <form className="signupForm" onSubmit={()=>{this.signup();}}>
           <div class="username">
             <label className="col-sm-4 col-form-label">username: </label>
             <input
@@ -138,6 +90,7 @@ export default class Login extends Component {
               className="form-control"
               type="password"
               name="password"
+			  secureTextEntry={true}
               value={this.state.s_password}
               placeholder="password"
               onChange={(e) => this.setState({ s_password: e.target.value })}
