@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StoryThumbnail } from "./StoryThumbail";
 
 const mockStories = [
@@ -28,13 +28,14 @@ const mockStories = [
 
 /**
  * 
- * @param {Object[]} stories a list of story objects
+ * @param {String} order the property to order the stories by
  * @todo replace mockStories with stories from the database
  * @todo take in a prop that we can sort by
  * @todo can go to the detail page by clicking on either the time posted or the comment
  */
-export const ListStories = ({ stories }) => {
+export const ListStories = ({ order }) => {
   const areStories = mockStories.length > 0;
+  const [stories, setStories] = useState(mockStories);
   return (
     <div>
       <ol>
