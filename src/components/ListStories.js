@@ -40,10 +40,9 @@ export const ListStories = ({ stories }) => {
       <ol>
         {areStories ?
           mockStories.map((story, index) => (
-            <li>
+            <li key={index}>
               <StoryThumbnail
                 story={story}
-                key={index}
                 number={index}
               />
             </li>

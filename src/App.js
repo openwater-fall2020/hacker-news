@@ -3,7 +3,7 @@ import Login from "./components/auth.js";
 import Reset from "./components/reset-password.js";
 import EmailSent from "./components/email-sent.js"
 import { ListStories } from "./components/ListStories";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 /**
  * @todo add a navbar component
