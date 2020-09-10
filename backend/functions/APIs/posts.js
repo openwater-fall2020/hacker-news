@@ -78,16 +78,20 @@ exports.getPosts = (request, response) => {
 }
 
 exports.getComments = (request, response) => {
-
+    const body = JSON.parse(request.body);
     postsRef
-		.orderBy("upvotes", "desc")
+        .doc(body.postID)
+        .collection('comments')
+        .orderBy('createdAt', 'desc')
 		.get()
 		.then((data) => {
 			let commentData = [];
 			data.forEach((doc) => {
-                postsRef.doc(doc.id).collection('comments').get().then((snap) => {
-                    console.log(snap.docs);
-                });
+                commentData.push({
+                    postedBy: doc.data().postedBy,
+                    createdAt: doc.data().createdAt,
+                    description: doc.data().description
+                })
 			});
 			return response.json(commentData);
 		})
