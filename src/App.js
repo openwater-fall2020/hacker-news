@@ -4,10 +4,12 @@ import Reset from "./components/reset-password.js";
 import EmailSent from "./components/email-sent.js"
 import { ListStories } from "./components/ListStories";
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import StoryDetail from "./components/StoryDetail.js";
+
+
 
 /**
  * @todo add a navbar component
- * @todo load posts from the database
  */
 const App = () => {
   return (
@@ -21,10 +23,15 @@ const App = () => {
       }}
     >
       <Router>
-        <Route path="/" exact={true} component={ListStories} />
+        <Route
+          path="/"
+          exact={true}
+          render={() => <ListStories />}
+        />
         <Route path="/login" component={Login} />
         <Route path="/forgot" component={Reset} />
         <Route path="/sentemail" component={EmailSent} />
+        <Route path="/story/:id" component={StoryDetail} />
       </Router>
     </div>
   );

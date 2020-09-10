@@ -50,7 +50,7 @@ export const StoryThumbnail = ({ story }) => {
         </a>
         <a
           style={style.a}
-          href="#"
+          href={`/story/${story.id}`}
         >
           {story.date}
         </a>
@@ -59,7 +59,7 @@ export const StoryThumbnail = ({ story }) => {
         <p style={style.p}>|</p>
         <a
           style={style.a}
-          href="#"
+          href={`/story/${story.id}`}
         >
           {commentString(story.comments.length)}
         </a>
