@@ -8,6 +8,7 @@ import React from 'react';
  * @todo clicking upvote button upvotes the post if logged in
  * @todo clicking the author's name links to their page
  * @todo update upvote to an arrow
+ * @todo if not logged in redirect to login page when doing logged-in only functions
  */
 export const StoryThumbnail = ({ story }) => {
   const pluralStringAndNum = (str, num) => {
