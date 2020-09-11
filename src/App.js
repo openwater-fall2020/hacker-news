@@ -8,10 +8,6 @@ import StoryDetail from "./components/StoryDetail.js";
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
 
-
-/**
- * @todo add a navbar component
- */
 const App = () => {
   return (
     <div
