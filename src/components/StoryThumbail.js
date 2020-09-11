@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from "moment";
 
 /**
  * @param {Object} story a story object
@@ -9,6 +10,7 @@ import React from 'react';
  * @todo clicking the author's name links to their page
  * @todo update upvote to an arrow
  * @todo if not logged in redirect to login page when doing logged-in only functions
+ * @todo format date to be relative
  */
 export const StoryThumbnail = ({ story }) => {
   const pluralStringAndNum = (str, num) => {
@@ -21,6 +23,11 @@ export const StoryThumbnail = ({ story }) => {
     else return pluralStringAndNum('comment', num);
   };
 
+  const formatRelativeDate = (date) => {
+    const today = moment(new Date());
+    return moment(date).from(today);
+  };
+
   return (
     <div>
       <div style={{ display: 'flex' }}>
@@ -29,7 +36,7 @@ export const StoryThumbnail = ({ story }) => {
         </p>
         <a
           style={style.a}
-          href={story.link}
+          href={story.url}
         >
           {story.title}
         </a>
@@ -40,28 +47,28 @@ export const StoryThumbnail = ({ story }) => {
         }}
       >
         <p style={style.p}>
-          {pluralStringAndNum("point", story.points)}
+          {pluralStringAndNum("point", story.upvotes)}
         </p>
         <a
           href="#"
           style={style.a}
         >
-          {story.author}
+          {(story.postedBy)}
         </a>
         <a
           style={style.a}
-          href={`/story/${story.id}`}
+          href={`/story/${story.postID}`}
         >
-          {story.date}
+          {formatRelativeDate(story.postedAt)}
         </a>
         <p style={style.p}>|</p>
         <p style={style.p}>hide</p>
         <p style={style.p}>|</p>
         <a
           style={style.a}
-          href={`/story/${story.id}`}
+          href={`/story/${story.postID}`}
         >
-          {commentString(story.comments.length)}
+          {story.comments ? commentString(story.comments.length) : commentString(0)}
         </a>
       </div>
     </div>
