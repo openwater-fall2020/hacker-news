@@ -17,10 +17,12 @@ const {
     uploadPost,
     postComments,
     getPosts,
-    getComments
+    getComments,
+    deletePost,
+    deleteComment,
+    updatePost,
+    updateComment
 } = require("./APIs/posts");
-
-
 
 app.use(cors());
 // Account
@@ -32,6 +34,10 @@ app.post("/uploadPost", uploadPost);
 app.post("/postComments", postComments);
 app.get("/getPosts", getPosts);
 app.get("/getComments", getComments);
+app.post("/deletePost", deletePost);
+app.post("/deleteComment", deleteComment);
+app.post("/updatePost", updatePost);
+app.post("/updateComment", updateComment);
 
 exports.api = functions.https.onRequest(app);
 
