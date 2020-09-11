@@ -17,10 +17,10 @@ export default class Login extends Component {
       baseURL: 'http://localhost:5001/hacker-news-a2575/us-central1/api',
       mode: 'cors'
     })
-    
+
     this.axios_instance = instance;
     this.signup = this.signup.bind(this);
-  
+
   }
   login(e) {
     e.preventDefault()
@@ -29,8 +29,13 @@ export default class Login extends Component {
       password: this.state.l_password
     })
     .then((res) => {
-      console.log(res);
+      console.log("res in login: ", res);
+	  // navigate to forum page
     })
+	.catch(err => {
+      console.log("error in login catch: ", err);
+	  this.setState({error:true})
+    });
   }
 
   signup(e) {
@@ -43,8 +48,15 @@ export default class Login extends Component {
       password: this.state.s_password
     })
     .then((res) => {
-      console.log(res);
+      console.log("res in signup: ",res);
     })
+	.catch(err => {
+      console.log("error in signup catch: ", err);
+	  this.setState({error:true})
+    });
+  }
+  componentDidMount(){
+	  this.setState({error:false})
   }
   render() {
 	  console.log(this.state.error)
