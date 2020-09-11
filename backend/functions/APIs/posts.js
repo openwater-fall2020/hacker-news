@@ -1,4 +1,4 @@
-const {db} = require('../utils/admin');
+const {admin, db} = require('../utils/admin');
 
 
 const postsRef = db.collection('posts');
@@ -51,22 +51,24 @@ exports.postComments = (request, response) => {
 }
 
 exports.getPosts = (request, response) => {
+
     postsRef
 		.orderBy("upvotes", "desc")
 		.get()
 		.then((data) => {
 			let postData = [];
-			data.forEach((doc) => {
-				postData.push({
-					postedBy: doc.data().postedBy,
-                    title: doc.data().title,
-                    url: doc.data().url,
-                    text: doc.data().text,
-                    upvotes: doc.data().upvotes,
-                    postedAt: doc.data().postedAt,
-                    postID: doc.id
-				});
-			});
+			data.forEach((query) => {
+                    postData.push({
+                        postedBy: query.data().postedBy,
+                        title: query.data().title,
+                        url: query.data().url,
+                        text: query.data().text,
+                        upvotes: query.data().upvotes,
+                        postedAt: query.data().postedAt,
+                        postID: query.id
+                    });
+            });
+            console.log(postData);
 			return response.json(postData);
 		})
 		.catch((err) => {
