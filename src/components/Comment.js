@@ -10,10 +10,10 @@ export const Comment = ({ comment }) => {
     <div>
       <div style={{ display: 'flex' }}>
         <p style={style.p}>UPVOTE</p>
-        <p style={style.p}>{comment.user}</p>
-        <p style={style.p}>{comment.date}</p>
+        <p style={style.p}>{comment.postedBy}</p>
+        <p style={style.p}>{comment.postedAt}</p>
       </div>
-      <p style={style.p}>{comment.body}</p>
+      <p style={style.p}>{comment.description}</p>
     </div>
   )
 };

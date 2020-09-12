@@ -5,12 +5,9 @@ import moment from "moment";
  * @param {Object} story a story object
  * @param {Number} number the number to display next to the story
  * @todo user can hide post if logged in
- * @todo clicking on comments switches to detailed view
  * @todo clicking upvote button upvotes the post if logged in
- * @todo clicking the author's name links to their page
  * @todo update upvote to an arrow
  * @todo if not logged in redirect to login page when doing logged-in only functions
- * @todo format date to be relative
  */
 export const StoryThumbnail = ({ story }) => {
   const pluralStringAndNum = (str, num) => {
@@ -33,7 +30,7 @@ export const StoryThumbnail = ({ story }) => {
       <div style={{ display: 'flex' }}>
         <p style={style.p}>
           UPVOTE
-        </p>
+      </p>
         <a
           style={style.a}
           href={story.url}
@@ -49,12 +46,9 @@ export const StoryThumbnail = ({ story }) => {
         <p style={style.p}>
           {pluralStringAndNum("point", story.upvotes)}
         </p>
-        <a
-          href="#"
-          style={style.a}
-        >
-          {(story.postedBy)}
-        </a>
+        <p style={style.p}>
+          {story.postedBy}
+        </p>
         <a
           style={style.a}
           href={`/story/${story.postID}`}
