@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 export default class Post extends Component {
   constructor(props) {
@@ -10,13 +12,30 @@ export default class Post extends Component {
     };
   }
 
-  postComment(){
-	  alert("Comment Posted!")
-	  // TODO
+  postComment(e) {
+    e.preventDefault();
+    if (Cookies.get('username')) {
+      try {
+        axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/uploadPost', {
+          username: Cookies.get('username'),
+          title: this.state.title,
+          url: this.state.url,
+          text: this.state.text
+
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              window.location.replace('/');
+            };
+          })
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
   render() {
     return (
-      <form className="submitForm" onSubmit={(e) => {this.postComment()}}>
+      <form className="submitForm" onSubmit={(e) => { this.postComment(e) }}>
         <div className="title">
           <label> title </label>
           <input
