@@ -16,9 +16,9 @@ export default class Login extends Component {
       hashedPassword: "",
     };
     const instance = axios.create({
-      baseURL: "http://localhost:5001/hacker-news-a2575/us-central1/api",
-      mode: "cors",
-    });
+      baseURL: 'https://us-central1-hacker-news-a2575.cloudfunctions.net/api',
+      mode: 'cors'
+    })
 
     this.axios_instance = instance;
     this.signup = this.signup.bind(this);
