@@ -15,11 +15,11 @@ firebase.initializeApp(config['config']);
             .auth()
             .signInWithEmailAndPassword(userDetails.username + '@hacker-news.com', userDetails.password)
             .then((data) => {
-                return data.user.getIdToken();
+                return data.user.uid;
             })
             .then((token) => {
                 return response.json({
-                    loginToken: token
+                    uid: token
                 })
             })
             .catch((err) => {
@@ -38,13 +38,12 @@ firebase.initializeApp(config['config']);
          username: request.body.username,
          password: request.body.password
      }
-
-     let token, userId;
      db
-        .doc(`/users/${newUser.username}`)
+        .collection('users')
+        .where("username", "==", newUser.username)
         .get()
-        .then((doc) => {
-            if (doc.exists) {
+        .then((data) => {
+            if (data.size > 0) {
                 return response.status(400).json({
                     username: 'Username already taken'
                 });
@@ -55,35 +54,38 @@ firebase.initializeApp(config['config']);
                                 newUser.username + '@hacker-news.com', 
                                 newUser.password
                             );
+
             }
         })
         .then((data) => {
-            userId = data.user.uid;
-            return data.user.getIdToken();
-        })
-        .then((idtoken) => {
-            token = idtoken;
+            let uid = data.user.uid;
             const userData = {
                 username: newUser.username,
                 createdAt: new Date().toISOString(),
-                uid: userId,
-                upvotedPosts: []
+                uid: uid,
+                upvotedPosts: [],
+                uploadedPosts: []
             }
-            return db
-                    .doc(`/users/${newUser.username}`)
-                    .set(userData);
-        })
-        .then(() => {
-            return response.status(201).json({
-                signUpToken: token
-            });
+            db
+                .doc(`/users/${uid}`)
+                .set(userData)
+                .then(() => {
+                    return response.status(201).json({
+                        uid: uid
+                    });
+
+                })
         })
         .catch((err) => {
             console.error(err);
             if (err.code === 'auth/email-already-in-use') {
-				return response.status(400).json({ email: 'Username already in use' });
+				return response.status(400).json({ 
+                    Username: 'Username already in use' 
+                });
 			} else {
-				return response.status(500).json({ general: 'Something went wrong, please try again' });
+				return response.status(500).json({ 
+                    general: 'Something went wrong, please try again' 
+                });
 			}
         })
  }
