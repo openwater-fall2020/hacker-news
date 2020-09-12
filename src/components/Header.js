@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import { Container } from "react-bootstrap";
 
 /**
@@ -20,8 +22,8 @@ export const Header = () => {
       <p>|</p>
       <p>jobs</p>
       <p>|</p>
-      <p>submit</p>
-      <p>|</p>
+	  <a href="/post" style={style.a}> submit </a>      
+	  <p>|</p>
       <a href="/login" style={style.a}>login</a>
     </Container>
   )

@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import StoryDetail from "./components/StoryDetail.js";
 import { Header } from "./components/Header";
 import { Container } from "react-bootstrap";
+import Post from "./components/post.js"
 import axios from "axios";
 
 /**
@@ -70,6 +71,7 @@ const App = () => {
           <Route path="/login" component={Login} />
           <Route path="/forgot" component={Reset} />
           <Route path="/sentemail" component={EmailSent} />
+		  <Route path="/post" component={Post} />
           <Route
             path="/story/:postID"
             render={({ match }) => <StoryDetail match={match} stories={stories} />}
