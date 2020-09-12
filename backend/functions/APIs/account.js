@@ -7,7 +7,6 @@ firebase.initializeApp(config['config']);
 
 // Login User
  exports.loginUser = (request, response) => {
-    // const body = JSON.parse(request.body);
      const userDetails = {
          username: request.body.username,
          password: request.body.password
@@ -33,7 +32,6 @@ firebase.initializeApp(config['config']);
 
  // Sign Up
  exports.signUpUser = (request, response) => {
-     console.log(request.body);
     //  const body = JSON.parse(request.body);
     //  console.log(body);
      const newUser = {
@@ -68,7 +66,8 @@ firebase.initializeApp(config['config']);
             const userData = {
                 username: newUser.username,
                 createdAt: new Date().toISOString(),
-                uid: userId
+                uid: userId,
+                upvotedPosts: []
             }
             return db
                     .doc(`/users/${newUser.username}`)
