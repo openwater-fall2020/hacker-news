@@ -16,20 +16,21 @@ const App = () => {
   const [stories, setStories] = useState([]);
 
   useEffect(() => {
-    const fetchComments = () => {
-      if (stories.length > 0) {
-        console.log('now run')
-        const storiesWithComments = [...stories];
-        storiesWithComments.forEach((story) => {
-          axios.get(`https://us-central1-hacker-news-a2575.cloudfunctions.net/api/getComments?postID=${story.postID}`)
-            .then((res) => {
-              story.comments = res.data;
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        })
-        setStories([...storiesWithComments]);
+    const fetchComments = (posts) => {
+      if (posts.length > 0) {
+        const storiesWithComments = [...posts];
+        storiesWithComments.forEach(async (story) => {
+          let data;
+          try {
+            const res = await axios.get(`https://us-central1-hacker-news-a2575.cloudfunctions.net/api/getComments?postID=${story.postID}`)
+            data = await res.data;
+          } catch (err) {
+            console.log(err);
+          } finally {
+            story.comments = data;
+            setStories([...storiesWithComments]);
+          }
+        });
       }
     };
 
@@ -41,8 +42,7 @@ const App = () => {
       } catch (err) {
         console.log(err);
       } finally {
-        setStories(data);
-        cb();
+        cb(data);
       }
     };
 
@@ -61,20 +61,22 @@ const App = () => {
     >
       <Header />
       <Container style={{ paddingLeft: '0px', backgroundColor: '#f6f6ef', height: '95%' }}>
-        <Router>
-          <Route
-            path="/"
-            exact={true}
-            render={() => <ListStories stories={stories} />}
-          />
-          <Route path="/login" component={Login} />
-          <Route path="/forgot" component={Reset} />
-          <Route path="/sentemail" component={EmailSent} />
-          <Route
-            path="/story/:postID"
-            render={({ match }) => <StoryDetail match={match} stories={stories} />}
-          />
-        </Router>
+        {stories &&
+          <Router>
+            <Route
+              path="/"
+              exact={true}
+              render={() => <ListStories stories={stories} />}
+            />
+            <Route path="/login" render={() => <Login />} />
+            <Route path="/forgot" component={Reset} />
+            <Route path="/sentemail" component={EmailSent} />
+            <Route
+              path="/story/:postID"
+              render={({ match }) => <StoryDetail match={match} stories={stories} />}
+            />
+          </Router>
+        }
       </Container>
     </div>
   );
