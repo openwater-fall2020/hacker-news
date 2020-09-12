@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Cookies from "js-cookie";
+import axios from "axios";
 
 import { StoryThumbnail } from "./StoryThumbail";
 import { Comment } from "./Comment";
@@ -6,11 +8,10 @@ import { Comment } from "./Comment";
 /**
  * 
  * @param {Object} match the url parameter
- * @todo change the mock story to on load fetch the proper story from the DB
- * @todo add comment input state
  */
 export const StoryDetail = ({ stories, match }) => {
   const [story, setStory] = useState({});
+  const [commentInput, setCommentInput] = useState('');
 
   useEffect(() => {
     const filterStory = () => {
@@ -24,15 +25,35 @@ export const StoryDetail = ({ stories, match }) => {
     filterStory();
   }, [stories, match]);
 
+  const createComment = () => {
+    if (Cookies.get('username')) {
+      try {
+        axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/postComments', {
+          username: Cookies.get('username'),
+          description: commentInput,
+          postID: story.postID
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              window.location.reload();
+            }
+          });
+      } catch (err) {
+        console.log(err);
+      };
+    };
+  };
 
   const thumbnail = () => {
     return (
       <div>
         <StoryThumbnail story={story} />
-        <textarea />
-        <form method="POST" action="">
-          <button>add comment</button>
-        </form>
+        <textarea onChange={(e) => setCommentInput(e.target.value)} />
+        <button
+          onClick={() => createComment()}
+        >
+          add comment
+          </button>
         {
           story.comments &&
           story.comments.map((comment, index) => (
