@@ -1,5 +1,4 @@
 const functions = require('firebase-functions');
-const cors = require('cors');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -8,6 +7,7 @@ const cors = require('cors');
 //   response.send("Hello from Firebase!");
 // });
 const app = require("express")();
+const cors = require('cors');
 const {
     signUpUser,
 	loginUser
@@ -24,7 +24,10 @@ const {
     updateComment
 } = require("./APIs/posts");
 
-app.use(cors());
+app.use(cors({
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+}));
 // Account
 app.post("/signUpUser", signUpUser);
 app.post("/loginUser", loginUser);
