@@ -21,7 +21,9 @@ const {
     deletePost,
     deleteComment,
     updatePost,
-    updateComment
+    updateComment,
+    upvotePost,
+    downvotePost
 } = require("./APIs/posts");
 
 app.use(cors({
@@ -41,6 +43,8 @@ app.post("/deletePost", deletePost);
 app.post("/deleteComment", deleteComment);
 app.post("/updatePost", updatePost);
 app.post("/updateComment", updateComment);
+app.post("/upvotePost", upvotePost);
+app.post("/downvotePost", downvotePost);
 
 exports.api = functions.https.onRequest(app);
 

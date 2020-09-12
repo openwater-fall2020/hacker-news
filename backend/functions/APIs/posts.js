@@ -14,18 +14,32 @@ exports.uploadPost = (request, response) => {
         upvotes: 0,
         postedAt: new Date().toISOString()
     }
-
-    postsRef
-        .add(newPost)
-        .then((doc) => {
-            return response.json(doc.id);
-        })
-        .catch((err) => {
-            response.status(500).json({
-                error: 'Something went wrong'
+    postsRef.where("title", "==", newPost.title).get().then((data) => {
+        if (data.size > 0) {
+            return response.status(500).json({
+                Error: "Duplicate Title found"
             })
-            console.error(err);
-        })
+        } else {
+            postsRef
+                .add(newPost)
+                .then((doc) => {
+                    userRef
+                        .doc(body.uid)
+                        .update({
+                            uploadedPosts: admin.firestore.FieldValue.arrayUnion(doc.id)
+                        })
+                    return response.json({
+                        postID: doc.id
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    return response.status(500).json({
+                        error: 'Something went wrong'
+                    })   
+                })
+        }
+    })
 }
 
 exports.postComments = (request, response) => {
@@ -140,23 +154,12 @@ exports.deleteComment = (request, response) => {
 }
 
 exports.updatePost = (request, response) => {
-
-    if (request.body.toUpvote) {
-        console.log("here")
-        userRef
-                .doc(request.body.username)
-                .update({
-                    upvotedPosts: admin.firestore.FieldValue.arrayUnion(request.body.postID)
-                })
-    }
-
     postsRef
             .doc(request.body.postID)
             .update({
                 title: request.body.title,
                 url: request.body.url,
-                text: request.body.text,
-                upvotes: request.body.upvotes
+                text: request.body.text
             })
             .then((data) => {
                 return response.status(200).json({
@@ -190,10 +193,52 @@ exports.updateComment = (request, response) => {
             })
 }
 
-exports.updateUserDetails = (request, response) => {
-    userRef
-            .doc(request.body.username)
-            .set()
-
+exports.upvotePost = (request, response) => {
+        if (request.body.upvotes >= 0) {
+            userRef
+                .doc(request.body.username)
+                .update({
+                    upvotedPosts: admin.firestore.FieldValue.arrayUnion(request.body.postID)
+                })
+            postsRef
+                .doc(request.body.postID)
+                .update({
+                    upvotes: admin.firestore.FieldValue.increment(1)
+                })
+                .then((data) => {
+                    return response.status(200).json({
+                        Success: "Post upvoted!"
+                    })
+                })
+                .catch((err) => {
+                    return response.status(500).json({
+                        error: err.code
+                    })
+                })
+        }
 }
 
+exports.downvotePost = (request, response) => {
+    if (request.body.upvotes > 0) {
+        userRef
+            .doc(request.body.username)
+            .update({
+                upvotedPosts: admin.firestore.FieldValue.arrayRemove(request.body.postID)
+            })
+        postsRef
+            .doc(request.body.postID)
+            .update({
+                upvotes: admin.firestore.FieldValue.increment(-1)
+            })
+            .then((data) => {
+                return response.status(200).json({
+                    Success: "Post downvoted!"
+                })
+            })
+            .catch((err) => {
+                return response.status(500).json({
+                    error: err.code
+                })
+            })
+    }
+}
