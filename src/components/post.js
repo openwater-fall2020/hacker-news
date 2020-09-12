@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import { verifyLogin } from "../cookies";
+
 export default class Post extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +16,7 @@ export default class Post extends Component {
 
   postComment(e) {
     e.preventDefault();
-    if (Cookies.get('username')) {
+    const createComment = () => {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/uploadPost', {
           username: Cookies.get('username'),
@@ -31,7 +33,8 @@ export default class Post extends Component {
       } catch (err) {
         console.log(err);
       }
-    }
+    };
+    verifyLogin(createComment);
   }
   render() {
     return (

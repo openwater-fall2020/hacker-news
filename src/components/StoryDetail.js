@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { StoryThumbnail } from "./StoryThumbail";
 import { Comment } from "./Comment";
+import { verifyLogin } from "../cookies";
 
 /**
  * @param {Array} stories 
@@ -27,7 +28,7 @@ export const StoryDetail = ({ stories, match }) => {
   }, [stories, match]);
 
   const createComment = () => {
-    if (Cookies.get('username')) {
+    const postComment = () => {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/postComments', {
           username: Cookies.get('username'),
@@ -42,8 +43,8 @@ export const StoryDetail = ({ stories, match }) => {
       } catch (err) {
         console.log(err);
       };
-    } else {
-    }
+    };
+    verifyLogin(postComment);
   };
 
   const thumbnail = () => {
