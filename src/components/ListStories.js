@@ -2,7 +2,7 @@ import React from "react";
 import { StoryThumbnail } from "./StoryThumbail";
 
 export const ListStories = ({ stories }) => {
-  const areStories = stories && stories.length > 0
+  const areStories = stories && stories.length > 0;
   return (
     <div>
       <ol>
