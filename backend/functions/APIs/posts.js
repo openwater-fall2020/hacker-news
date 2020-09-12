@@ -2,7 +2,7 @@ const {admin, db} = require('../utils/admin');
 
 
 const postsRef = db.collection('posts');
-
+const userRef = db.collection('users');
 
 exports.uploadPost = (request, response) => {
     const body = request.body;
@@ -78,20 +78,25 @@ exports.getPosts = (request, response) => {
 }
 
 exports.getComments = (request, response) => {
+    console.log(request.query.postID);
     postsRef
-        .doc(request.body.postID)
+        .doc(request.query.postID)
         .collection('comments')
         .orderBy('createdAt', 'desc')
 		.get()
 		.then((data) => {
 			let commentData = [];
 			data.forEach((doc) => {
+                console.log(doc);
+                console.log(doc.data());
                 commentData.push({
                     postedBy: doc.data().postedBy,
                     createdAt: doc.data().createdAt,
-                    description: doc.data().description
+                    description: doc.data().description,
+                    commentID: doc.id
                 })
-			});
+            });
+            console.log(commentData);
 			return response.json(commentData);
 		})
 		.catch((err) => {
@@ -135,6 +140,16 @@ exports.deleteComment = (request, response) => {
 }
 
 exports.updatePost = (request, response) => {
+
+    if (request.body.toUpvote) {
+        console.log("here")
+        userRef
+                .doc(request.body.username)
+                .update({
+                    upvotedPosts: admin.firestore.FieldValue.arrayUnion(request.body.postID)
+                })
+    }
+
     postsRef
             .doc(request.body.postID)
             .update({
@@ -175,4 +190,10 @@ exports.updateComment = (request, response) => {
             })
 }
 
+exports.updateUserDetails = (request, response) => {
+    userRef
+            .doc(request.body.username)
+            .set()
+
+}
 

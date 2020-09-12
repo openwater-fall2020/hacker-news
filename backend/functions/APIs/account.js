@@ -66,7 +66,8 @@ firebase.initializeApp(config['config']);
             const userData = {
                 username: newUser.username,
                 createdAt: new Date().toISOString(),
-                uid: userId
+                uid: userId,
+                upvotedPosts: []
             }
             return db
                     .doc(`/users/${newUser.username}`)
