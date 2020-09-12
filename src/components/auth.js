@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+var passwordHash = require("password-hash");
 
 export default class Login extends Component {
   constructor(props) {
@@ -12,68 +13,75 @@ export default class Login extends Component {
       s_password: "",
       errorMessage: "Bad Login",
       error: false,
+      hashedPassword: "",
     };
     const instance = axios.create({
-      baseURL: 'http://localhost:5001/hacker-news-a2575/us-central1/api',
-      mode: 'cors'
-    })
+      baseURL: "http://localhost:5001/hacker-news-a2575/us-central1/api",
+      mode: "cors",
+    });
 
     this.axios_instance = instance;
     this.signup = this.signup.bind(this);
-
   }
   login(e) {
-    e.preventDefault()
-    this.axios_instance.post('/loginUser', {
-      username: this.state.l_username,
-      password: this.state.l_password
-    })
-    .then((res) => {
-      console.log("res in login: ", res);
-	  // navigate to forum page
-    })
-	.catch(err => {
-      console.log("error in login catch: ", err);
-	  this.setState({error:true})
-    });
+    e.preventDefault();
+    if (passwordHash.verify(this.state.l_password, this.state.hashedPassword)) {
+      this.axios_instance
+        .post("/loginUser", {
+          username: this.state.l_username,
+          password: this.state.hashedPassword,
+        })
+        .then((res) => {
+          console.log("res in login: ", res);
+          // navigate to forum page
+        });
+    } else {
+      console.log("passwords match:" , passwordHash.verify(this.state.l_username, this.state.hashedPassword));
+      this.setState({ error: true });
+    }
   }
 
   signup(e) {
-    e.preventDefault()
+    e.preventDefault();
     // console.log(username);
     // console.log(password);
     console.log(this.state);
-    this.axios_instance.post('/signUpUser', {
-      username: this.state.s_username,
-      password: this.state.s_password
-    })
-    .then((res) => {
-      console.log("res in signup: ",res);
-    })
-	.catch(err => {
-      console.log("error in signup catch: ", err);
-	  this.setState({error:true})
-    });
+    var hashedPassword = passwordHash.generate(this.state.s_password);
+    this.setState({ hashedPassword: hashedPassword });
+    this.axios_instance
+      .post("/signUpUser", {
+        username: this.state.s_username,
+        password: hashedPassword,
+      })
+      .then((res) => {
+        console.log("res in signup: ", res);
+      })
+      .catch((err) => {
+        console.log("error in signup catch: ", err);
+        this.setState({ error: true });
+      });
   }
-  componentDidMount(){
-	  this.setState({error:false})
+  componentDidMount() {
+    this.setState({ error: false });
   }
   render() {
-	  console.log(this.state.error)
-	  let error = this.state.error;
-	  let message;
-	  if (error) {
-		  message = <p>Bad Login</p>;
-	  } else{
-		  message = <br/>;
-	  }
+    console.log(this.state.error);
+    let error = this.state.error;
+    let message;
+    if (error) {
+      message = <p>Bad Login</p>;
+    } else {
+      message = <br />;
+    }
     return (
       <div>
-	  {message}
+        {message}
         <h3>Login</h3>
         <form
           className="loginForm"
-          onSubmit={(e)=>{this.login(e); }}
+          onSubmit={(e) => {
+            this.login(e);
+          }}
         >
           <div className="username">
             <label className="col-sm-4 col-form-label">username: </label>
@@ -91,7 +99,7 @@ export default class Login extends Component {
             <input
               className="form-control"
               type="password"
-			  secureTextEntry={true}
+              secureTextEntry={true}
               name="password"
               value={this.state.l_password}
               placeholder="password"
@@ -102,11 +110,10 @@ export default class Login extends Component {
           <div>
             <input className="ghost-button" type="submit" value="   login   " />
           </div>
-
         </form>
-		<Link to="/forgot">
-		  <p> Forgot your password? </p>
-		</Link>
+        <Link to="/forgot">
+          <p> Forgot your password? </p>
+        </Link>
         <h3>Create Account </h3>
         <form className="signupForm" onSubmit={(e) => this.signup(e)}>
           <div className="username">
@@ -126,7 +133,7 @@ export default class Login extends Component {
               className="form-control"
               type="password"
               name="password"
-			        secureTextEntry={true}
+              secureTextEntry={true}
               value={this.state.s_password}
               placeholder="password"
               onChange={(e) => this.setState({ s_password: e.target.value })}
