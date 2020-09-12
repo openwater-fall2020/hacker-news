@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
-var passwordHash = require("password-hash");
+import Cookies from 'js-cookie';
+
 
 export default class Login extends Component {
   constructor(props) {
@@ -13,8 +14,6 @@ export default class Login extends Component {
       s_password: "",
       errorMessage: "Bad Login",
       error: false,
-      hashedPassword: "",
-      isLoggedIn: false,
     };
     const instance = axios.create({
       baseURL: "https://us-central1-hacker-news-a2575.cloudfunctions.net/api",
@@ -27,46 +26,33 @@ export default class Login extends Component {
   login(e) {
     e.preventDefault();
     this.setState({ error: false });
-	//@GAGAN: here we need to retrieve the user's hashed password to verify them
-	// and log them in and store it in this.state if that's possible
-    console.log(this.state);
-    console.log(
-      "password:",
-      this.state.l_password,
-      "hash: ",
-      this.state.hashedPassword
-    );
-    if (passwordHash.verify(this.state.l_password, this.state.hashedPassword)) {
-      this.axios_instance
-        .post("/loginUser", {
-          username: this.state.l_username,
-          password: this.state.hashedPassword,
-        })
-        .then((res) => {
-          console.log("res in login: ", res);
-          this.setState({ isLoggedIn: true });
-        })
-        .catch((err) => {
-          console.log("error in signup catch: ", err);
-          this.setState({ error: true });
-        });
-    } else {
-      console.log(
-        "do passwords match?",
-        passwordHash.verify(this.state.l_username, this.state.hashedPassword)
-      );
-      this.setState({ error: true });
-    }
+    /*need to verify user*/
+    this.axios_instance
+      .post("/loginUser", {
+        username: this.state.l_username,
+        password: this.state.l_password,
+      })
+      .then((res) => {
+        console.log("res in login: ", res);
+        if (res.status === 200) {
+          window.location.replace("/");
+		  Cookies.set('username', this.state.l_username);
+		  Cookies.get();
+		  console.log("wtf")
+  		  console.log("cookies: ", Cookies.get());
+        }
+      })
+      .catch((err) => {
+        console.log("error in login catch: ", err);
+        this.setState({ error: true });
+      });
+
   }
 
   signup(e) {
     e.preventDefault();
     this.setState({ error: false });
-	//@GAGAN: here we need to check if user is unique
-    var hashedPassword = passwordHash.generate(this.state.s_password);
-    console.log("hashedPassword: ", hashedPassword);
-    console.log(this.state);
-    this.setState({ hashedPassword: hashedPassword });
+    /*here we need to check if user is unique*/
     this.axios_instance
       .post("/signUpUser", {
         username: this.state.s_username,
@@ -77,12 +63,13 @@ export default class Login extends Component {
       })
       .catch((err) => {
         console.log("error in signup catch: ", err);
-        alert("Usernames have to be unique and can only contain letters, digits, dashes and underscores, and should be between 2 and 15 characters long. Please choose another.")
+        alert(
+          "Usernames have to be unique and can only contain letters, digits, dashes and underscores, and should be between 2 and 15 characters long. Please choose another."
+        );
       });
   }
 
   render() {
-    console.log("error: ", this.state.error);
     let error = this.state.error;
     let message;
     if (error) {
@@ -90,10 +77,9 @@ export default class Login extends Component {
     } else {
       message = <br />;
     }
-    if (this.state.isLoggedIn) {
-      return <Redirect to="/" />;
-    } else {
+
       return (
+
         <div>
           {message}
           <h3>Login</h3>
@@ -127,13 +113,11 @@ export default class Login extends Component {
             </div>
 
             <div>
-              <Link to="/">
                 <input
                   className="ghost-button"
                   type="submit"
                   value="     login     "
                 />
-              </Link>
             </div>
           </form>
           <br />
@@ -143,7 +127,7 @@ export default class Login extends Component {
           <h3>Create Account </h3>
           <form className="signupForm" onSubmit={(e) => this.signup(e)}>
             <div className="username">
-              <label className="col-sm-4 col-form-label">username: </label>
+              <label>username: </label>
               <input
                 className="form-control"
                 type="text"
@@ -174,6 +158,5 @@ export default class Login extends Component {
           </form>
         </div>
       );
-    }
   }
 }
