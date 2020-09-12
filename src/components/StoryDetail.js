@@ -6,8 +6,9 @@ import { StoryThumbnail } from "./StoryThumbail";
 import { Comment } from "./Comment";
 
 /**
- * 
+ * @param {Array} stories 
  * @param {Object} match the url parameter
+ * @todo if not logged in, add comment redirects user to login page
  */
 export const StoryDetail = ({ stories, match }) => {
   const [story, setStory] = useState({});
@@ -41,7 +42,8 @@ export const StoryDetail = ({ stories, match }) => {
       } catch (err) {
         console.log(err);
       };
-    };
+    } else {
+    }
   };
 
   const thumbnail = () => {
