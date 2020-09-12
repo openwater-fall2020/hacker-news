@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 import { Container } from "react-bootstrap";
 
 /**
@@ -7,7 +9,7 @@ import { Container } from "react-bootstrap";
 export const Header = () => {
   return (
     <Container style={style.container}>
-      <p style={{ fontWeight: 'bold' }}>Hacker News</p>
+      <a href="/" style={{ fontWeight: 'bold' }, style.a}>Hacker News</a>
       <p>new</p>
       <p >|</p>
       <p>past</p>
@@ -20,9 +22,9 @@ export const Header = () => {
       <p>|</p>
       <p>jobs</p>
       <p>|</p>
-      <p>submit</p>
-      <p>|</p>
-      <p>login</p>
+	  <a href="/post" style={style.a}> submit </a>      
+	  <p>|</p>
+      <a href="/login" style={style.a}>login</a>
     </Container>
   )
 };
@@ -34,6 +36,10 @@ const style = {
     paddingTop: '0px',
     paddingBottom: '0px',
     justifyContent: 'space-between'
+  },
+  a: {
+    textDecoration: 'none',
+    color: 'inherit'
   }
 }
 
