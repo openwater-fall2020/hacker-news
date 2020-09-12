@@ -1,29 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import { StoryThumbnail } from "./StoryThumbail";
 
-/**
- * 
- * @param {String} order the property to order the stories by
- */
-export const ListStories = () => {
-  const [stories, setStories] = useState([]);
-  const areStories = stories.length > 0;
-
-  useEffect(() => {
-    const fetchStories = () => {
-      axios.get('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/getPosts')
-        .then((res) => {
-          setStories(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
-
-    fetchStories();
-  }, []);
-
+export const ListStories = ({ stories }) => {
+  const areStories = stories && stories.length > 0
   return (
     <div>
       <ol>
@@ -32,11 +11,10 @@ export const ListStories = () => {
             <li key={index}>
               <StoryThumbnail
                 story={story}
-                number={index}
               />
             </li>
           )) :
-          <p>Oops! There aren't any stories here to display.</p>
+          <p>No posts to see here.</p>
         }
       </ol>
     </div>
