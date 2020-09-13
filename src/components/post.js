@@ -20,10 +20,10 @@ export default class Post extends Component {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/uploadPost', {
           username: Cookies.get('username'),
+          uid: Cookies.get('uid'),
           title: this.state.title,
           url: this.state.url,
           text: this.state.text
-
         })
           .then((res) => {
             if (res.status === 200) {
