@@ -16,7 +16,7 @@ export default class Post extends Component {
 
   postComment(e) {
     e.preventDefault();
-    const createComment = () => {
+    const createPost = () => {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/uploadPost', {
           username: Cookies.get('username'),
@@ -34,8 +34,9 @@ export default class Post extends Component {
         console.log(err);
       }
     };
-    verifyLogin(createComment);
-  }
+    verifyLogin(createPost);
+  };
+
   render() {
     return (
       <form className="submitForm" onSubmit={(e) => { this.postComment(e) }}>

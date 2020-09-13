@@ -60,7 +60,7 @@ export const StoryDetail = ({ stories, match }) => {
         {
           story.comments &&
           story.comments.map((comment, index) => (
-            <Comment key={index} comment={comment} />
+            <Comment key={index} comment={comment} postID={story.postID} />
           ))
         }
       </div>
@@ -69,7 +69,7 @@ export const StoryDetail = ({ stories, match }) => {
 
   return (
     <div>
-      { story.text ? thumbnail() : <p>No post to see here...</p>}
+      { (story.text || story.url) ? thumbnail() : <p>No post to see here...</p>}
     </div>
   )
 };

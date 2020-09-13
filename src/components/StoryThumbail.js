@@ -3,7 +3,7 @@ import moment from "moment";
 import { verifyLogin } from "../cookies";
 import axios from 'axios';
 import Cookies from 'js-cookie';
-
+import { canDelete } from '../cookies';
 /**
  * @param {Object} story a story object
  * @param {Number} number the number to display next to the story
@@ -29,6 +29,24 @@ export const StoryThumbnail = ({ story }) => {
     return moment(date).from(today);
   };
 
+  const deletePost = () => {
+    if (canDelete(story.postedBy)) {
+      try {
+        axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/deletePost', {
+          postID: story.postID
+        })
+          .then((res) => {
+            if (res.status === 200) {
+              window.location.reload();
+            }
+          })
+      } catch (err) {
+        console.log(err);
+      };
+    };
+  };
+
+
   const upvotePost = () => {
     console.log('upvoting');
     const upvote = () => {
@@ -42,6 +60,22 @@ export const StoryThumbnail = ({ story }) => {
       }
     };
     verifyLogin(upvote);
+  };
+
+  const showDelete = () => {
+    if (canDelete(story.postedBy)) {
+      return (
+        <div>
+          <p style={{ margin: '0px' }}>|</p>
+          <p
+            style={style.p}
+            onClick={() => deletePost()}
+          >
+            delete
+        </p>
+        </div>
+      );
+    }
   };
 
   return (
@@ -86,6 +120,7 @@ export const StoryThumbnail = ({ story }) => {
         >
           {story.comments ? commentString(story.comments.length) : commentString(0)}
         </a>
+        {showDelete()}
       </div>
     </div>
   )
