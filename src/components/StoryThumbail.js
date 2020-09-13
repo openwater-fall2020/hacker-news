@@ -65,10 +65,10 @@ export const StoryThumbnail = ({ story }) => {
   const showDelete = () => {
     if (canDelete(story.postedBy)) {
       return (
-        <div>
-          <p style={{ margin: '0px' }}>|</p>
+        <div style={{ display: 'flex' }}>
+          <p style={style.p}>|</p>
           <p
-            style={style.p}
+            style={style.pBtn}
             onClick={() => deletePost()}
           >
             delete
@@ -112,8 +112,6 @@ export const StoryThumbnail = ({ story }) => {
           {formatRelativeDate(story.postedAt)}
         </a>
         <p style={style.p}>|</p>
-        <p style={style.p}>hide</p>
-        <p style={style.p}>|</p>
         <a
           style={style.a}
           href={`/story/${story.postID}`}
@@ -135,6 +133,11 @@ const style = {
   p: {
     marginRight: '5px',
     marginTop: '0px'
+  },
+  pBtn: {
+    marginRight: '5px',
+    marginTop: '0px',
+    cursor: 'pointer'
   },
 };
 
