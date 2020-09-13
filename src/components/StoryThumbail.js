@@ -53,8 +53,14 @@ export const StoryThumbnail = ({ story }) => {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/upvotePost', {
           postID: story.postID,
-          username: Cookies.get('username')
+          uid: Cookies.get('uid'),
+          upvotes: 0
         })
+          .then((res) => {
+            if (res.status === 200) {
+              window.location.reload();
+            }
+          })
       } catch (err) {
         console.log(err);
       }
