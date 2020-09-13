@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import { verifyLogin } from "../cookies";
+import { verifyLogin, canDelete } from "../cookies";
 
 export const Edit = ({ match, stories }) => {
   const [title, setTitle] = useState('');
@@ -42,7 +42,9 @@ export const Edit = ({ match, stories }) => {
           console.log(err);
         }
       };
-      verifyLogin(createPost);
+      if (canDelete(story.postedBy)) {
+        verifyLogin(createPost);
+      };
     };
   };
 

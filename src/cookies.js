@@ -14,4 +14,5 @@ export const canDelete = (username) => {
 
 export const logout = () => {
   Cookies.remove('username');
+  Cookies.remove('uid');
 };
