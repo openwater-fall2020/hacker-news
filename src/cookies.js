@@ -6,6 +6,10 @@ export const verifyLogin = (fn) => {
   };
 };
 
+export const canDelete = (username) => {
+  return Cookies.get('username') === username;
+};
+
 export const logout = () => {
   Cookies.remove('username');
 };
