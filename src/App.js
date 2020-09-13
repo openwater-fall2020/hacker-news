@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
+import axios from "axios";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
 import Login from "./components/auth.js";
 import Reset from "./components/reset-password.js";
 import EmailSent from "./components/email-sent.js"
 import { ListStories } from "./components/ListStories";
-import { BrowserRouter as Router, Route } from "react-router-dom";
 import StoryDetail from "./components/StoryDetail.js";
 import { Header } from "./components/Header";
-import { Container } from "react-bootstrap";
 import Post from "./components/post.js"
-import axios from "axios";
+import { Edit } from "./components/Edit";
 
 /**
  * @todo fix loading comments
@@ -72,10 +74,14 @@ const App = () => {
             <Route path="/login" render={() => <Login />} />
             <Route path="/forgot" component={Reset} />
             <Route path="/sentemail" component={EmailSent} />
-			<Route path="/post" component={Post} />
+            <Route path="/post" component={Post} />
             <Route
               path="/story/:postID"
               render={({ match }) => <StoryDetail match={match} stories={stories} />}
+            />
+            <Route
+              path="/edit/:postID"
+              render={({ match }) => <Edit match={match} stories={stories} />}
             />
           </Router>
         }

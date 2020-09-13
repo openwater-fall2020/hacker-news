@@ -4,6 +4,7 @@ import { verifyLogin } from "../cookies";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { canDelete } from '../cookies';
+import { Link } from "react-router-dom";
 /**
  * @param {Object} story a story object
  * @param {Number} number the number to display next to the story
@@ -68,7 +69,7 @@ export const StoryThumbnail = ({ story }) => {
     verifyLogin(upvote);
   };
 
-  const showDelete = () => {
+  const showIfOwner = () => {
     if (canDelete(story.postedBy)) {
       return (
         <div style={{ display: 'flex' }}>
@@ -79,6 +80,13 @@ export const StoryThumbnail = ({ story }) => {
           >
             delete
         </p>
+          <p style={style.p}>|</p>
+          <Link
+            style={style.a}
+            to={`/edit/${story.postID}`}
+          >
+            edit
+        </Link>
         </div>
       );
     }
@@ -124,7 +132,7 @@ export const StoryThumbnail = ({ story }) => {
         >
           {story.comments ? commentString(story.comments.length) : commentString(0)}
         </a>
-        {showDelete()}
+        {showIfOwner()}
       </div>
     </div>
   )
