@@ -10,7 +10,8 @@ const app = require("express")();
 const cors = require('cors');
 const {
     signUpUser,
-	loginUser
+    loginUser,
+    getUserDetails
 } = require("./APIs/account");
 
 const {
@@ -33,6 +34,7 @@ app.use(cors({
 // Account
 app.post("/signUpUser", signUpUser);
 app.post("/loginUser", loginUser);
+app.get("/getUserDetails", getUserDetails);
 
 // Posts
 app.post("/uploadPost", uploadPost);

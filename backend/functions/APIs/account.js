@@ -4,7 +4,7 @@ const {db} = require('../utils/admin');
 const config = require('../utils/config');
 
 firebase.initializeApp(config['config']);
-
+const userRef = db.collection('users');
 // Login User
  exports.loginUser = (request, response) => {
      const userDetails = {
@@ -89,3 +89,17 @@ firebase.initializeApp(config['config']);
 			}
         })
  }
+ 
+ exports.getUserDetails = (request, response) => {
+    userRef
+        .doc(request.query.uid)
+        .get()
+        .then((d) => {
+            return response.status(200).json(d.data());
+        })
+        .catch((err) => {
+            return response.status(500).json({
+                Error: err.error
+            })
+        })
+}
