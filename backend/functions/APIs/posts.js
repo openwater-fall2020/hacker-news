@@ -87,7 +87,9 @@ exports.getPosts = (request, response) => {
 		})
 		.catch((err) => {
 			console.error(err);
-			return response.status(500).json({ error: err.code });
+			return response.status(500).json({ 
+                error: err.code 
+            });
 		});
 }
 
@@ -196,7 +198,7 @@ exports.updateComment = (request, response) => {
 exports.upvotePost = (request, response) => {
         if (request.body.upvotes >= 0) {
             userRef
-                .doc(request.body.username)
+                .doc(request.body.uid)
                 .update({
                     upvotedPosts: admin.firestore.FieldValue.arrayUnion(request.body.postID)
                 })
@@ -241,4 +243,17 @@ exports.downvotePost = (request, response) => {
                 })
             })
     }
+}
+exports.getUserDetails = (request, response) => {
+    userRef
+        .doc(request.body.uid)
+        .get()
+        .then((d) => {
+            return response.status(200).json(d.data());
+        })
+        .catch((err) => {
+            return response.status(500).json({
+                Error: err.error
+            })
+        })
 }
