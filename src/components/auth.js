@@ -36,10 +36,8 @@ export default class Login extends Component {
         console.log("res in login: ", res);
         if (res.status === 200) {
           window.location.replace("/");
-		  Cookies.set('username', this.state.l_username);
-		  Cookies.get();
-		  console.log("wtf")
-  		  console.log("cookies: ", Cookies.get());
+          Cookies.set('username', this.state.l_username);
+          Cookies.set('uid', res.data.uid);
         }
       })
       .catch((err) => {
@@ -78,85 +76,85 @@ export default class Login extends Component {
       message = <br />;
     }
 
-      return (
+    return (
 
-        <div>
-          {message}
-          <h3>Login</h3>
-          <form
-            className="loginForm"
-            onSubmit={(e) => {
-              this.login(e);
-            }}
-          >
-            <div className="username">
-              <label>username: </label>
-              <input
-                className="form-control"
-                type="text"
-                name="username"
-                value={this.state.l_username}
-                placeholder="username"
-                onChange={(e) => this.setState({ l_username: e.target.value })}
-              />
-            </div>
-            <div className="password" style={{ paddingBottom: 20 }}>
-              <label>password: </label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={this.state.l_password}
-                placeholder="password"
-                onChange={(e) => this.setState({ l_password: e.target.value })}
-              />
-            </div>
+      <div>
+        {message}
+        <h3>Login</h3>
+        <form
+          className="loginForm"
+          onSubmit={(e) => {
+            this.login(e);
+          }}
+        >
+          <div className="username">
+            <label>username: </label>
+            <input
+              className="form-control"
+              type="text"
+              name="username"
+              value={this.state.l_username}
+              placeholder="username"
+              onChange={(e) => this.setState({ l_username: e.target.value })}
+            />
+          </div>
+          <div className="password" style={{ paddingBottom: 20 }}>
+            <label>password: </label>
+            <input
+              className="form-control"
+              type="password"
+              name="password"
+              value={this.state.l_password}
+              placeholder="password"
+              onChange={(e) => this.setState({ l_password: e.target.value })}
+            />
+          </div>
 
-            <div>
-                <input
-                  className="ghost-button"
-                  type="submit"
-                  value="     login     "
-                />
-            </div>
-          </form>
-          <br />
-          <Link to="/forgot">
-            <p> Forgot your password? </p>
-          </Link>
-          <h3>Create Account </h3>
-          <form className="signupForm" onSubmit={(e) => this.signup(e)}>
-            <div className="username">
-              <label>username: </label>
-              <input
-                className="form-control"
-                type="text"
-                name="username"
-                value={this.state.s_username}
-                placeholder="username"
-                onChange={(e) => this.setState({ s_username: e.target.value })}
-              />
-            </div>
-            <div className="password" style={{ paddingBottom: 20 }}>
-              <label>password: </label>
-              <input
-                className="form-control"
-                type="password"
-                name="password"
-                value={this.state.s_password}
-                placeholder="password"
-                onChange={(e) => this.setState({ s_password: e.target.value })}
-              />
-            </div>
-            <div>
-              <input
-                className="ghost-button"
-                type="submit"
-                value="   create account   "
-              />
-            </div>
-          </form>
-        </div>
-      );
+          <div>
+            <input
+              className="ghost-button"
+              type="submit"
+              value="     login     "
+            />
+          </div>
+        </form>
+        <br />
+        <Link to="/forgot">
+          <p> Forgot your password? </p>
+        </Link>
+        <h3>Create Account </h3>
+        <form className="signupForm" onSubmit={(e) => this.signup(e)}>
+          <div className="username">
+            <label>username: </label>
+            <input
+              className="form-control"
+              type="text"
+              name="username"
+              value={this.state.s_username}
+              placeholder="username"
+              onChange={(e) => this.setState({ s_username: e.target.value })}
+            />
+          </div>
+          <div className="password" style={{ paddingBottom: 20 }}>
+            <label>password: </label>
+            <input
+              className="form-control"
+              type="password"
+              name="password"
+              value={this.state.s_password}
+              placeholder="password"
+              onChange={(e) => this.setState({ s_password: e.target.value })}
+            />
+          </div>
+          <div>
+            <input
+              className="ghost-button"
+              type="submit"
+              value="   create account   "
+            />
+          </div>
+        </form>
+      </div>
+    );
   }
 }
