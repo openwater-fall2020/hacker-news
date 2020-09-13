@@ -1,16 +1,14 @@
 import React from 'react';
 import moment from "moment";
-import { verifyLogin } from "../cookies";
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { canDelete } from '../cookies';
+import { canDelete, verifyLogin } from '../cookies';
+import { Link } from "react-router-dom";
 /**
  * @param {Object} story a story object
  * @param {Number} number the number to display next to the story
- * @todo user can hide post if logged in
  * @todo clicking upvote button upvotes the post if logged in
  * @todo update upvote to an arrow
- * @todo if not logged in redirect to login page when doing logged-in only functions
  * @todo users can delete their own posts
  */
 export const StoryThumbnail = ({ story }) => {
@@ -48,7 +46,21 @@ export const StoryThumbnail = ({ story }) => {
 
 
   const upvotePost = () => {
-    console.log('upvoting');
+    const alreadyUpvoted = () => {
+      try {
+        axios.get(`https://us-central1-hacker-news-a2575.cloudfunctions.net/api/getUserDetails?uid=${Cookies.get('uid')}`)
+          .then((res) => {
+            const { upvotedPosts } = res.data;
+            const found = upvotedPosts.find((id) => id === story.postID);
+            if (!found) {
+              upvote();
+            }
+          })
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
     const upvote = () => {
       try {
         axios.post('https://us-central1-hacker-news-a2575.cloudfunctions.net/api/upvotePost', {
@@ -65,10 +77,10 @@ export const StoryThumbnail = ({ story }) => {
         console.log(err);
       }
     };
-    verifyLogin(upvote);
+    verifyLogin(alreadyUpvoted);
   };
 
-  const showDelete = () => {
+  const showIfOwner = () => {
     if (canDelete(story.postedBy)) {
       return (
         <div style={{ display: 'flex' }}>
@@ -79,6 +91,13 @@ export const StoryThumbnail = ({ story }) => {
           >
             delete
         </p>
+          <p style={style.p}>|</p>
+          <Link
+            style={style.a}
+            to={`/edit/${story.postID}`}
+          >
+            edit
+        </Link>
         </div>
       );
     }
@@ -124,7 +143,7 @@ export const StoryThumbnail = ({ story }) => {
         >
           {story.comments ? commentString(story.comments.length) : commentString(0)}
         </a>
-        {showDelete()}
+        {showIfOwner()}
       </div>
     </div>
   )

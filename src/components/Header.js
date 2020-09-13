@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 export const Header = () => {
   return (
     <Container style={style.container}>
-      <a href="/" style={{ fontWeight: 'bold' }, style.a}>Hacker News</a>
+      <a href="/" style={style.aBold}>Hacker News</a>
       <a href="/post" style={style.a}> submit </a>
       <p style={style.p}>|</p>
       {Cookies.get('username') ?
@@ -32,6 +32,12 @@ const style = {
     textDecoration: 'none',
     color: 'inherit',
     marginRight: '10px'
+  },
+  aBold: {
+    textDecoration: 'none',
+    color: 'inherit',
+    marginRight: '10px',
+    fontWeight: 'bold',
   },
   p: {
     marginRight: '10px'
